@@ -36,7 +36,7 @@ The project uses the **Bank Marketing Dataset**.
 ### Dataset Characteristics
 
 - **Records:** 41,188
-- **Features:** 20+ 
+- **Features:** 20+
 - **Target:** `y`
 
 The dataset contains both numerical and categorical customer and campaign-related features.
@@ -100,15 +100,11 @@ Duplicate rows were identified and removed before modeling.
 
 ### Unknown Values
 
-The dataset contains `"unknown"` values in categorical features.
-
-These values were handled using the mode calculated from the **training data only** to avoid data leakage.
+The dataset contains `"unknown"` values in categorical features. These values were handled using the mode calculated from the **training data only** to avoid data leakage.
 
 ### Outlier Handling
 
-Numerical outliers were handled using **IQR capping** instead of removing records.
-
-This approach preserves the dataset size while reducing the impact of extreme values.
+Numerical outliers were handled using **IQR capping** instead of removing records. This approach preserves the dataset size while reducing the impact of extreme values.
 
 ---
 
@@ -124,9 +120,7 @@ The preprocessing pipeline treats numerical and categorical variables separately
 ### Categorical Features
 
 - Most Frequent Imputation
-- One-Hot Encoding
-- `drop='first'`
-- `handle_unknown='ignore'`
+- One-Hot Encoding (`drop='first'`, `handle_unknown='ignore'`)
 
 A `ColumnTransformer` was used to combine both preprocessing pipelines.
 
@@ -139,17 +133,13 @@ The dataset was split into:
 - **80% Training Data**
 - **20% Testing Data**
 
-A stratified split was used to preserve the target class distribution.
-
-The train-test split was performed **before preprocessing** to prevent data leakage.
+A stratified split was used to preserve the target class distribution. The train-test split was performed **before preprocessing** to prevent data leakage.
 
 ---
 
-# 📉 Principal Component Analysis (PCA)
+## 📉 Principal Component Analysis (PCA)
 
-PCA was applied to reduce the dimensionality of the processed dataset.
-
-The number of components was selected using the **95% cumulative explained variance rule**.
+PCA was applied to reduce the dimensionality of the processed dataset. The number of components was selected using the **95% cumulative explained variance rule**.
 
 ### PCA Workflow
 
@@ -162,7 +152,7 @@ This reduces dimensionality while preserving most of the information in the orig
 
 ---
 
-# 🤖 Support Vector Machine (SVM)
+## 🤖 Support Vector Machine (SVM)
 
 A Support Vector Machine classifier with an **RBF kernel** was used for classification.
 
@@ -174,13 +164,11 @@ The base model uses:
 
 The model was trained using the PCA-transformed features.
 
----
-
-## 🔧 Hyperparameter Tuning
+### Hyperparameter Tuning
 
 `GridSearchCV` was used to find the best SVM parameters.
 
-### Parameters Tested
+**Parameters tested:**
 
 | Parameter | Values |
 |---|---|
@@ -188,7 +176,7 @@ The model was trained using the PCA-transformed features.
 | `gamma` | 0.001, 0.01, 0.1 |
 | `kernel` | RBF |
 
-### Cross-Validation
+**Cross-validation:**
 
 - 5-fold cross-validation
 - Optimization metric: **F1 Score**
@@ -197,7 +185,7 @@ Using F1 as the optimization metric is particularly useful because the target cl
 
 ---
 
-# 📈 Model Evaluation
+## 📈 Model Evaluation
 
 The final model was evaluated using multiple classification metrics:
 
@@ -213,13 +201,30 @@ A ROC curve was also generated to visualize the classification performance.
 
 ---
 
-## 📊 Evaluation Metrics
+## 🛠️ Tools & Method
 
-The project calculates the following metrics on the test set:
+- **Language/Libraries:** Python, pandas, NumPy, scikit-learn, matplotlib/seaborn
+- **Modeling:** PCA for dimensionality reduction + SVM (RBF kernel) for classification
+- **Tuning:** GridSearchCV with 5-fold cross-validation, optimized for F1 score
 
-```text
-Accuracy
-Precision
-Recall
-F1 Score
-ROC AUC
+---
+
+## 📁 Repository Structure
+
+```
+├── data/                    # Raw and/or processed Bank Marketing dataset
+├── notebooks/                # EDA, preprocessing, PCA, and modeling notebooks
+├── src/                       # Reusable preprocessing/training scripts (if applicable)
+└── README.md                   # This file
+```
+
+> Update this structure to match your actual repo layout before pushing.
+
+---
+
+## 📌 Definitions
+
+- **PCA (Principal Component Analysis)** — a dimensionality-reduction technique that projects features onto orthogonal components ranked by explained variance
+- **SVM (Support Vector Machine)** — a classifier that finds the optimal boundary (hyperplane) separating classes, here using an RBF kernel for non-linear separation
+- **F1 Score** — the harmonic mean of precision and recall, useful for imbalanced classification tasks
+- **ROC AUC** — Area under the Receiver Operating Characteristic curve, measuring separability between classes across thresholds
